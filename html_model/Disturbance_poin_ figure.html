@@ -1,0 +1,160 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+      <link rel="stylesheet" href="https://gw.alipayobjects.com/os/rmsportal/PqLCOJpqoOUfuPRacUzE.css" />
+    <title>Welcome to our data overview !</title>
+    <style> ::-webkit-scrollbar{display:none;}html,body{overflow:hidden;margin:0;}
+    	#map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+    <style type="text/css">
+        .top{
+
+            /* 设置宽度高度背景颜色 */
+            height: auto; /*高度改为自动高度*/
+            width:100%;
+            margin-left: 0;
+            background:steelblue;
+            /*rgb(189, 181, 181);*/
+            position: fixed; /*固定在顶部*/
+            top: 0;/*离顶部的距离为0*/
+            margin-bottom: 5px;
+}
+.top ul{
+    /* 清除ul标签的默认样式 */
+    width: auto;/*宽度也改为自动*/
+    list-style-type: none;
+    white-space:nowrap;
+    overflow: hidden;
+    margin-left: 1%;
+    padding: 0;
+}
+.top li {
+    float:left; /* 使li内容横向浮动，即横向排列  */
+    margin-right:2%;  /* 两个li之间的距离*/
+    position: relative;
+    overflow: hidden;
+}
+
+.top li a{
+   /* 设置链接内容显示的格式*/
+    display: block; /* 把链接显示为块元素可使整个链接区域可点击 */
+    color:white;
+    text-align: center;
+    padding: 10px;
+    overflow: hidden;
+    text-decoration: none; /* 去除下划线 */
+}
+.top li a:hover{
+
+    color:lightblue;
+}
+.top ul li ul{
+    /* 设置二级菜单 */
+    margin-left: -0.2px;
+    background:steelblue;
+    position: relative;
+    display: none; /* 默认隐藏二级菜单的内容 */
+
+}
+.top ul li ul li{
+    /* 二级菜单li内容的显示 */
+
+    float:none;
+    text-align: center;
+}
+.top ul li:hover ul{
+    /* 鼠标选中二级菜单内容时 */
+    display: block;
+}
+body{
+    background:#eff3f5;
+}
+.container{position:relative;height: auto;min-height: 100%;margin: 0}
+.container .header{height: 100px;background: #0000FF;}
+.container .push{padding-bottom: 100px;}
+.footer{position:relative;height: 100px;margin-top:-100px;background: #0000FF;}
+</style>
+</head>
+<body>
+<div class="top" style='position:fixed; z-index:999; top:0;'>
+                   <center>
+                    <ul>
+                    <li><a href="./Index.html" style=" color:white; font-size:29px;font-family:Calibri;"><img src="images/1.png" height="34"></a></li>
+                    <li>
+                        <a style=" color:white; font-size:23px;font-family:Calibri;margin-top:5px;">Environment related</a>
+                        <ul>
+                            <li><a href="./Facilities condition.html"style=" color:white; font-size:23px;font-family:Calibri;margin-top:5px;">Facilities condition</a></li>
+                            <li><a href="./Number_of_bedroom.html"style=" color:white; font-size:23px;font-family:Calibri">Number of bedroom</a></li>
+                           <li><a href="./scatter_diagram.html"style=" color:white; font-size:23px;font-family:Calibri">Size & rental</a></li>
+                             <li><a href="./Word cloud.html"style=" color:white; font-size:23px;font-family:Calibri">Word cloud</a></li>
+                            <li><a href="./Rectangular tree graph.html"style=" color:white; font-size:23px;font-family:Calibri">Percentage of available rooms</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a style=" color:white; font-size:23px;font-family:Calibri;margin-top:5px;">Price related</a>
+                        <ul>
+                             <li><a href="./Price_analysis_chart.html"style=" color:white; font-size:23px;font-family:Calibri">Range of price</a></li>
+                            <li><a href="./Disturbance_poin_ figure.html"style=" color:white; font-size:23px;font-family:Calibri">Disturbance point figure</a></li>
+                            <li><a href="./Histogram_avg_price.html"style=" color:white; font-size:23px;font-family:Calibri">The average price(Histogram)</a></li>
+                             <li><a href="./Ladder_olyline_iagram.html"style=" color:white; font-size:23px;font-family:Calibri">District average housing price fluctuation </a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a style=" color:white; font-size:23px;font-family:Calibri;margin-top:5px;">Geographical location information</a>
+                        <ul>
+                            <li><a href="./MapOverview.html"style=" color:white; font-size:23px;font-family:Calibri">Map Overview</a></li>
+                            <li><a href="./Map_on_NanShan.html"style=" color:white; font-size:23px;font-family:Calibri">Choose room in  Nanshan (Dev version)</a></li>
+                        </ul>
+                    </li>
+                      </ul>
+                    </center>
+            </div>
+<div id="mountNode" style="margin-top:100px"></div>
+<script>/*Fixing iframe window.innerHeight 0 issue in Safari*/document.body.clientHeight;</script>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.g2-3.5.1/dist/g2.min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.data-set-0.10.1/dist/data-set.min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
+<script>
+  $.getJSON('sz_size.json', function(data) {
+    var chart = new G2.Chart({
+      container: 'mountNode',
+      forceFit: true,
+      height: 980
+    });
+    chart.source(data);
+    chart.tooltip({
+      crosshairs: {
+        type: 'cross'
+      }
+    });
+    chart.legend({
+      reversed: true // 图例项逆序显示
+    });
+    chart.axis('Score', {
+      grid: null
+    });
+    // x轴的栅格线居中
+    chart.axis('Class', {
+      tickLine: null,
+      subTickCount: 1, // 次刻度线个数
+      subTickLine: {
+        lineWidth: 1,
+        stroke: '#BFBFBF',
+        length: 4
+      },
+      grid: {
+        align: 'center', // 网格顶点从两个刻度中间开始
+        lineStyle: {
+          stroke: '#8C8C8C',
+          lineWidth: 1,
+          lineDash: [3, 3]
+        }
+      }
+    });
+    chart.point().position('Class*Rental').color('Distinct').adjust('jitter').shape('circle').opacity(0.65).size(8);
+    chart.render();
+  });
+</script>
+</body>
+</html>
